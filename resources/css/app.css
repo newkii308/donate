@@ -1,0 +1,249 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/* Enable class-based dark mode (toggle by adding `.dark` on <html>). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    /* Noto Sans Lao is the primary Lao UI font. */
+    --font-sans: 'Noto Sans Lao', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* ชุดสีแบรนด์เริ่มต้น = ม่วงนีออน (Neon Purple) — ปรับได้รันไทม์ผ่าน [data-accent] */
+    --color-brand-50: #f5f3ff;
+    --color-brand-100: #ede9fe;
+    --color-brand-200: #ddd6fe;
+    --color-brand-300: #c4b5fd;
+    --color-brand-400: #a78bfa;
+    --color-brand-500: #8b5cf6;
+    --color-brand-600: #7c3aed;
+    --color-brand-700: #6d28d9;
+    --color-brand-800: #5b21b6;
+    --color-brand-900: #4c1d95;
+
+    /* RGB ของสีหลัก (ไว้ทำ glow/โปร่งใส) — sync กับ data-accent ด้านล่าง */
+    --brand-rgb: 124 58 237;
+}
+
+/*
+|------------------------------------------------------------------------------
+| ธีมสี (Accent presets) — สลับได้รันไทม์ด้วย <html data-accent="...">
+| Tailwind v4 คอมไพล์ utility อย่าง bg-brand-600 ให้อ้างอิง var(--color-brand-600)
+| ดังนั้นการ override ตัวแปรในนี้จะเปลี่ยนสีทั้งเว็บทันที
+|------------------------------------------------------------------------------
+*/
+[data-accent='purple'] {
+    --color-brand-50:#f5f3ff; --color-brand-100:#ede9fe; --color-brand-200:#ddd6fe;
+    --color-brand-300:#c4b5fd; --color-brand-400:#a78bfa; --color-brand-500:#8b5cf6;
+    --color-brand-600:#7c3aed; --color-brand-700:#6d28d9; --color-brand-800:#5b21b6; --color-brand-900:#4c1d95;
+    --brand-rgb: 124 58 237;
+}
+[data-accent='blue'] {
+    --color-brand-50:#eff6ff; --color-brand-100:#dbeafe; --color-brand-200:#bfdbfe;
+    --color-brand-300:#93c5fd; --color-brand-400:#60a5fa; --color-brand-500:#3b82f6;
+    --color-brand-600:#2563eb; --color-brand-700:#1d4ed8; --color-brand-800:#1e40af; --color-brand-900:#1e3a8a;
+    --brand-rgb: 37 99 235;
+}
+[data-accent='cyan'] {
+    --color-brand-50:#ecfeff; --color-brand-100:#cffafe; --color-brand-200:#a5f3fc;
+    --color-brand-300:#67e8f9; --color-brand-400:#22d3ee; --color-brand-500:#06b6d4;
+    --color-brand-600:#0891b2; --color-brand-700:#0e7490; --color-brand-800:#155e75; --color-brand-900:#164e63;
+    --brand-rgb: 8 145 178;
+}
+[data-accent='pink'] {
+    --color-brand-50:#fdf2f8; --color-brand-100:#fce7f3; --color-brand-200:#fbcfe8;
+    --color-brand-300:#f9a8d4; --color-brand-400:#f472b6; --color-brand-500:#ec4899;
+    --color-brand-600:#db2777; --color-brand-700:#be185d; --color-brand-800:#9d174d; --color-brand-900:#831843;
+    --brand-rgb: 219 39 119;
+}
+[data-accent='green'] {
+    --color-brand-50:#ecfdf5; --color-brand-100:#d1fae5; --color-brand-200:#a7f3d0;
+    --color-brand-300:#6ee7b7; --color-brand-400:#34d399; --color-brand-500:#10b981;
+    --color-brand-600:#059669; --color-brand-700:#047857; --color-brand-800:#065f46; --color-brand-900:#064e3b;
+    --brand-rgb: 5 150 105;
+}
+[data-accent='orange'] {
+    --color-brand-50:#fff7ed; --color-brand-100:#ffedd5; --color-brand-200:#fed7aa;
+    --color-brand-300:#fdba74; --color-brand-400:#fb923c; --color-brand-500:#f97316;
+    --color-brand-600:#ea580c; --color-brand-700:#c2410c; --color-brand-800:#9a3412; --color-brand-900:#7c2d12;
+    --brand-rgb: 234 88 12;
+}
+[data-accent='red'] {
+    --color-brand-50:#fef2f2; --color-brand-100:#fee2e2; --color-brand-200:#fecaca;
+    --color-brand-300:#fca5a5; --color-brand-400:#f87171; --color-brand-500:#ef4444;
+    --color-brand-600:#dc2626; --color-brand-700:#b91c1c; --color-brand-800:#991b1b; --color-brand-900:#7f1d1d;
+    --brand-rgb: 220 38 38;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        @apply antialiased;
+    }
+    /* แถบเลื่อนสไตล์เกมมิ่งในโหมดมืด */
+    .dark ::-webkit-scrollbar { width: 10px; height: 10px; }
+    .dark ::-webkit-scrollbar-track { background: transparent; }
+    .dark ::-webkit-scrollbar-thumb {
+        background: rgb(var(--brand-rgb) / 0.45);
+        border-radius: 9999px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover { background: rgb(var(--brand-rgb) / 0.7); background-clip: content-box; }
+}
+
+/* คอมโพเนนต์ใช้ซ้ำ — โทนนีออน gaming + Apple-smooth */
+@layer components {
+    .nl-card {
+        @apply rounded-2xl border border-slate-200 bg-white shadow-sm
+               dark:border-white/10 dark:bg-slate-900/70 dark:shadow-none;
+    }
+    /* การ์ดเรืองแสง — ขอบม่วงนีออนจางๆ + glow เบาๆ ในโหมดมืด */
+    .nl-card-glow {
+        @apply rounded-2xl border border-slate-200 bg-white shadow-sm
+               dark:border-white/10 dark:bg-slate-900/70;
+    }
+    .dark .nl-card-glow {
+        box-shadow: 0 0 0 1px rgb(var(--brand-rgb) / 0.18),
+                    0 8px 40px -12px rgb(var(--brand-rgb) / 0.35);
+    }
+    .nl-input {
+        @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900 shadow-sm transition
+               placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/40 focus:outline-none
+               dark:border-white/10 dark:bg-slate-800/70 dark:text-slate-100 dark:placeholder:text-slate-500;
+    }
+    .nl-label {
+        @apply mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300;
+    }
+    .nl-btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold
+               transition active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-offset-2
+               focus:ring-offset-white dark:focus:ring-offset-slate-950 disabled:opacity-60;
+    }
+    .nl-btn-primary {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold
+               transition active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-offset-2
+               focus:ring-offset-white dark:focus:ring-offset-slate-950 disabled:opacity-60
+               bg-brand-600 text-white hover:bg-brand-500 focus:ring-brand-500;
+    }
+    .dark .nl-btn-primary {
+        box-shadow: 0 8px 30px -8px rgb(var(--brand-rgb) / 0.7);
+    }
+    .nl-btn-ghost {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold
+               transition active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-offset-2
+               focus:ring-offset-white dark:focus:ring-offset-slate-950 disabled:opacity-60
+               bg-slate-100 text-slate-700 hover:bg-slate-200 focus:ring-slate-400
+               dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10;
+    }
+    /* ป้ายชิป/แท็ก */
+    .nl-chip {
+        @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold
+               bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300;
+    }
+    /* ข้อความไล่เฉดสีแบรนด์ (โลโก้/หัวข้อ) */
+    .nl-gradient-text {
+        background-image: linear-gradient(135deg, var(--color-brand-400), var(--color-brand-600));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+}
+
+/* เอฟเฟกต์เรืองแสง (glow) + การเต้นของหัวใจ/ไอคอนไลฟ์ */
+@utility nl-glow {
+    box-shadow: 0 0 18px rgb(var(--brand-rgb) / 0.55);
+}
+@keyframes nl-pulse-live {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.55; transform: scale(0.88); }
+}
+.nl-live-dot {
+    animation: nl-pulse-live 1.4s ease-in-out infinite;
+}
+
+/* Motion for the public product landing page. */
+@keyframes nl-hero-rise {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes nl-product-float {
+    0%, 100% { transform: translateY(0) rotate(-0.2deg); }
+    50% { transform: translateY(-10px) rotate(0.2deg); }
+}
+@keyframes nl-alert-float {
+    0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 18px 55px rgb(var(--brand-rgb) / 0.22); }
+    50% { transform: translateY(-7px) scale(1.012); box-shadow: 0 24px 70px rgb(var(--brand-rgb) / 0.4); }
+}
+@keyframes nl-float-chip {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -8px, 0); }
+}
+@keyframes nl-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+@keyframes nl-tab-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+@keyframes nl-wave {
+    0%, 100% { transform: scaleY(0.55); opacity: 0.65; }
+    50% { transform: scaleY(1); opacity: 1; }
+}
+@keyframes nl-shimmer {
+    from { transform: translateX(-140%); }
+    to { transform: translateX(240%); }
+}
+
+.nl-hero-copy {
+    animation: nl-hero-rise 0.8s cubic-bezier(.2,.8,.2,1) both;
+}
+.nl-product-float {
+    animation: nl-product-float 6s ease-in-out infinite;
+}
+.nl-alert-float {
+    animation: nl-alert-float 3.2s ease-in-out infinite;
+}
+.nl-float-chip {
+    animation: nl-float-chip 4s ease-in-out infinite 0.6s;
+}
+.nl-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: nl-marquee 26s linear infinite;
+}
+.nl-tab-progress {
+    transform-origin: left;
+    animation: nl-tab-progress 5.5s linear both;
+}
+.nl-wave-bar {
+    transform-origin: bottom;
+    animation: nl-wave 1s ease-in-out infinite;
+}
+.nl-shimmer {
+    animation: nl-shimmer 3.5s ease-in-out infinite;
+}
+.nl-marquee-track:hover {
+    animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nl-hero-copy,
+    .nl-product-float,
+    .nl-alert-float,
+    .nl-float-chip,
+    .nl-marquee-track,
+    .nl-tab-progress,
+    .nl-wave-bar,
+    .nl-shimmer,
+    .nl-live-dot {
+        animation: none !important;
+    }
+}
